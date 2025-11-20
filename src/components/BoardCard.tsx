@@ -1,50 +1,50 @@
 import { useSetAtom } from "jotai";
 import React, { useState } from "react";
 import { boardState } from "../state/atoms/boardAtom";
+import { useNavigate } from "react-router-dom";
+type boardCardProps = {
+  id: string;
+  name: string;
+  createdAt: string;
+};
+const BoardCard: React.FC<boardCardProps> = ({ id, name, createdAt }) => {
+  const navigate = useNavigate();
+  const setBoards = useSetAtom(boardState);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(name);
 
-type boardCardProps= {
-    id : string,
-    name : string,
-    createdAt : string
-}
-const BoardCard : React.FC<boardCardProps> = ({id, name, createdAt})=>{
-    const setBoards = useSetAtom(boardState);
+  const handleDelete = () => {
+    setBoards((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+  };
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [editName, setEditName ]= useState(name);
+  const handleSave = () => {
+    if (!editName.trim()) return;
 
-    const handleDelete = ()=>{
-        setBoards((prev)=>{
-            const updated = {...prev};
-            delete updated[id];
-            return updated;
-        });
-    }
+    setBoards((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        name: editName.trim(),
+      },
+    }));
+    setIsEditing(false);
+  };
 
-    const handleSave = ()=>{
-        if(!editName.trim()) return;
-
-        setBoards((prev)=>({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                name : editName.trim(),
-            }
-        }))
-        setIsEditing(false)
-    }
-
-
-
-    return(
-         <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-xl transition cursor-pointer flex flex-col gap-2">
+  return (
+    <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-xl transition cursor-pointer flex flex-col gap-2">
       {!isEditing ? (
         <>
-          <h2 className="text-lg font-semibold">{name}</h2>
-          <p className="text-sm text-gray-500">
-            Created {new Date(createdAt).toLocaleDateString()}
-          </p>
+          <div onClick={() => navigate(`/boards/${id}`)} className="cursor-pointer flex-1">
+            <h2 className="text-lg font-semibold">{name}</h2>
+            <p className="text-sm text-gray-500">
+              Created {new Date(createdAt).toLocaleDateString()}
+            </p>
+          </div>
 
           <div className="flex gap-2 mt-2">
             <button
@@ -86,9 +86,7 @@ const BoardCard : React.FC<boardCardProps> = ({id, name, createdAt})=>{
         </>
       )}
     </div>
-    )
-
-}
-
+  );
+};
 
 export default BoardCard;

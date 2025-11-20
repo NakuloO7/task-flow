@@ -1,12 +1,11 @@
 
 // 🧩 A single task or item
 export interface Card {
-    id : string,
-    title :string,
-    description ?: string,
-    createdAt : string,
-    dueDate ?: string,
-    completed : boolean
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  createdAt: string; 
 }
 // 🧱 A list contains multiple cards 
 export interface List {

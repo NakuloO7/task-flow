@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import Home from "../pages/Home";
 import Boards from "../pages/Boards";
 import Login from "../pages/Login";
+import BoardDetails from "../pages/BoardDetails";
 
 
 const MainLayout : React.FC = ()=>{
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
         children : [
             {path: '/', element: <Home/> },
             {path: '/boards', element: <Boards/> },
+            {path: '/boards/:id', element: <BoardDetails/> },
             {path: '/login', element: <Login/> }
         ]
     }
